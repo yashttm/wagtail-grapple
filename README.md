@@ -1,9 +1,3 @@
-<!-- PROJECT SHIELDS -->
-[![Contributors][contributors-shield]]()
-[![MIT License][license-shield]][license-url]
-
-
-
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
@@ -91,42 +85,55 @@ Getting Grapple installed is designed to be as simple as possible!
 
 ### Prerequisites
 ```
-Django>= 2.2,<2.3
-wagtail >= 2.5,<2.6
-graphene-django>=2.2.0
-colorthief
-channels==1.1.8
-asgi_redis
-graphql_ws
+Django  >= 2.2, <2.3
+wagtail >= 2.5, <2.6
 ```
 
 ### Installation
-- `pip install wagtail_grapple`
-- Add the following to the `installed_apps` list in your wagtail settings file:
-    ```
+`pip install wagtail_grapple`
+
+<br />
+
+Add the following to the `installed_apps` list in your wagtail settings file:
+
+```
+installed_apps = [
+    ...
     "grapple",
     "graphene_django",
     "channels",
-    ```
-- Add the following to the bottom of the same settings file:
-    ```
-    # Grapple Config:
-    GRAPHENE = {"SCHEMA": "grapple.schema.schema"}
-    GRAPPLE_APPS = {
-            "home": ""
-    }
-    ```
-- Add the GraphQL urls to your `urls.py`:
-    ```
-    from grapple import urls as grapple_urls
     ...
-    urlpatterns = [
-        ...
-        url(r"", include(grapple_urls)),
-        ...
-    ]
-    ```
-- Done! Now you can proceed onto configuring your models to generate GraphQL types that adopt their stucture :tada:
+]
+```
+
+<br />
+
+Add the following to the bottom of the same settings file where each key is the app you want to this library to scan and the value is the prefix you want to give to GraphQL types (you can usually leave this blank):
+
+```
+# Grapple Config:
+GRAPHENE = {"SCHEMA": "grapple.schema.schema"}
+GRAPPLE_APPS = {
+    "home": ""
+}
+```
+
+<br />
+
+Add the GraphQL urls to your `urls.py`:
+
+```
+from grapple import urls as grapple_urls
+...
+urlpatterns = [
+    ...
+    url(r"", include(grapple_urls)),
+    ...
+]
+```
+
+<br/>
+Done! Now you can proceed onto configuring your models to generate GraphQL types that adopt their stucture :tada:
 
 
 <!-- USAGE EXAMPLES -->
