@@ -174,6 +174,7 @@ def build_node_type(
     for name, method in methods.items():
         setattr(graphql_node, name, MethodType(method, graphql_node))
 
+    print('debugging!')
     print(vars(graphql_node))
 
     return graphql_node
