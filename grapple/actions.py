@@ -111,13 +111,11 @@ def get_fields_and_properties(cls):
 
 def model_resolver(field_source):
     def mixin(self, instance, info, **kwargs):
-        print(field_source)
         field = getattr(instance, field_source)
         if issubclass(type(field), models.Manager):
-            print(field)
             return field.all()
 
-        return None
+        return field
 
     return mixin
 
@@ -173,9 +171,6 @@ def build_node_type(
 
     for name, method in methods.items():
         setattr(graphql_node, name, MethodType(method, graphql_node))
-
-    print('debugging!')
-    print(vars(graphql_node))
 
     return graphql_node
 
