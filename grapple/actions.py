@@ -117,7 +117,7 @@ def model_resolver(field_source):
             print(field)
             return field.all()
 
-        return field
+        return None
 
     return mixin
 
@@ -173,6 +173,8 @@ def build_node_type(
 
     for name, method in methods.items():
         setattr(graphql_node, name, MethodType(method, graphql_node))
+
+    print(vars(graphql_node))
 
     return graphql_node
 
