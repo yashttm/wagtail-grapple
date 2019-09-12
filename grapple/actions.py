@@ -111,7 +111,11 @@ def get_fields_and_properties(cls):
 
 def model_resolver(field_source):
     def mixin(self, instance, info, **kwargs):
-        return getattr(instance, field_source)
+        field = getattr(instance, field_source)
+        if issubclass(type(field), models.Manager):
+            return field.all()
+
+        return 
 
     return mixin
 

@@ -3,6 +3,7 @@ import graphene
 from django.contrib.contenttypes.models import ContentType
 
 from .registry import registry
+from .utils import serialize_rich_text
 
 
 # Classes used to define what the Django field should look like in the GQL type
@@ -22,9 +23,31 @@ class GraphQLField:
         self.field_source = kwargs.get("source", field_name)
 
 
+def GenerateRichTextType(serializers):
+    class RichTextString(graphene.Scalar):
+        @staticmethod
+        def serialize(value):
+            serialized_value = value
+
+            for serializer in serializers:
+                serialized_value = serializer(serialized_value)
+
+            return serialized_value
+
+    return RichTextString
+    
+
 def GraphQLString(field_name: str, **kwargs):
     def Mixin():
-        return GraphQLField(field_name, graphene.String, **kwargs)
+        is_richtext = kwargs.get('is_richtext', False)
+        richtext_serializers = kwargs.get('richtext_serializers', [])
+        
+        if is_richtext:
+            string_type = GenerateRichTextType([serialize_rich_text, *richtext_serializers])
+        else:
+            string_type = graphene.String
+
+        return GraphQLField(field_name, string_type, **kwargs)
 
     return Mixin
 

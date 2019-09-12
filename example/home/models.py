@@ -6,7 +6,8 @@ from wagtail.core.fields import StreamField
 from wagtail.contrib.settings.models import BaseSetting, register_setting
 
 from wagtail.core import blocks
-from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel, InlinePanel
+from wagtail.core.fields import RichTextField
+from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel, InlinePanel, RichTextFieldPanel
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.embeds.blocks import EmbedBlock
@@ -46,6 +47,7 @@ class BlogPage(HeadlessPreviewMixin, Page):
         on_delete=models.SET_NULL,
         related_name="+",
     )
+    example_rich_text = RichTextField()
     cover = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -72,6 +74,7 @@ class BlogPage(HeadlessPreviewMixin, Page):
     content_panels = Page.content_panels + [
         FieldPanel("author"),
         FieldPanel("date"),
+        RichTextFieldPanel("example_rich_text"),
         ImageChooserPanel("cover"),
         StreamFieldPanel("body"),
         InlinePanel("related_links", label="Related links"),
@@ -90,6 +93,7 @@ class BlogPage(HeadlessPreviewMixin, Page):
         GraphQLImage("cover"),
         GraphQLDocument("book_file"),
         GraphQLMedia("featured_media"),
+        GraphQLString("example_rich_text", is_richtext=True)
     ]
 
 

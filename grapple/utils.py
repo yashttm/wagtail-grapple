@@ -1,12 +1,15 @@
 import os
 import base64
 import tempfile
+from bs4 import BeautifulSoup
 from PIL import Image, ImageFilter
 from colorthief import ColorThief
 from django.conf import settings
 from wagtail.search.index import class_is_indexed
 from wagtail.search.models import Query
 from wagtail.search.backends import get_search_backend
+from wagtail.core.models import Page
+from wagtail.core.rich_text import RichText
 
 
 def resolve_queryset(
@@ -56,18 +59,40 @@ def resolve_queryset(
     return qs
 
 
-def image_as_base64(image_file, format="png"):
-    """
-    :param `image_file` for the complete path of image.
-    :param `format` is format for image, eg: `png` or `jpg`.
-    """
-    encoded_string = ""
-    image_file = settings.BASE_DIR + image_file
+def serialize_rich_text(source):
+    # Convert raw pseudo-HTML RichText source to a soup object
+    # so it can be manipulated.
+    soup = BeautifulSoup(source, 'html.parser')
 
-    if not os.path.isfile(image_file):
-        return "not an image"
+    # Add data required to generate page links in Gatsby.
+    for anchor in soup.find_all('a'):
+        if anchor.attrs.get('linktype', '') == 'page':
+            try:
+                pages = Page.objects.live().public()
+                page = pages.get(pk=anchor.attrs['id']).specific
+                page_type = page.__class__.__name__
 
-    with open(image_file, "rb") as img_f:
-        encoded_string = base64.b64encode(img_f.read())
+                new_tag = soup.new_tag(
+                    'a',
+                    href=page.get_url(),
 
-    return "data:image/%s;base64,%s" % (format, encoded_string)
+                    # Add dataset arguments to allow processing links on
+                    # the front-end.
+                    **{
+                        'data-page-type': page_type,
+                        'data-page-slug': page.slug,
+                        'data-page-url': page.url or page.url_path,
+                        'href': page.url or page.url_path
+                    }
+                )
+                new_tag.append(*anchor.contents)
+                anchor.replace_with(new_tag)
+            except Page.DoesNotExist:
+                # If page does not exist, add empty anchor tag with text.
+                new_tag = soup.new_tag('a')
+                new_tag.append(*anchor.contents)
+                anchor.replace_with(new_tag)
+
+    # Convert raw pseudo-HTML RichText into a front-end RichText
+    return str(RichText(str(soup)))
+    
