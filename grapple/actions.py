@@ -113,9 +113,10 @@ def model_resolver(field_source):
     def mixin(self, instance, info, **kwargs):
         field = getattr(instance, field_source)
         if issubclass(type(field), models.Manager):
+            print(field)
             return field.all()
 
-        return 
+        return field
 
     return mixin
 
