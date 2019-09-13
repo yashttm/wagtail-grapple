@@ -153,9 +153,13 @@ def GraphQLMedia(field_name: str):
 
 
 def GraphQLPage(field_name: str):
-    def Mixin():
-        from .types.pages import PageInterface
+    from .types.pages import PageInterface
 
-        return GraphQLField(field_name, PageInterface)
+    class Mixin(GraphQLField):
+        def __init__(self, field_name: str, field_type: type = None, **kwargs):
+            self.field_name = field_name
+            self.field_type = PageInterface
     
     return Mixin
+
+
