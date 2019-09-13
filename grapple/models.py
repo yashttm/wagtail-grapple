@@ -156,12 +156,11 @@ def GraphQLPage(field_name: str):
     def Mixin():
         from .types.pages import PageInterface
 
-        class Field(GraphQLField):
-            def __init__(self):
-                self.field_name = field_name
-                self.field_type = PageInterface
+        return {
+            "field_name": field_name,
+            "field_type": PageInterface
+        }
         
-        return Field
     return Mixin
 
 
