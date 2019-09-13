@@ -162,5 +162,6 @@ def GraphQLPage(field_name: str):
                 self.field_type = PageInterface
         
         return Field
+    return Mixin
 
 
