@@ -74,19 +74,22 @@ def GraphQLBoolean(field_name: str):
 
 
 def GraphQLSnippet(field_name: str, snippet_model: str, is_list: bool = False):
-    (app_label, model) = snippet_model.lower().split(".")
-    mdl = ContentType.objects.get(app_label=app_label, model=model)
-    if mdl:
-        field_type = registry.snippets[mdl.model_class()]
-    else:
-        field_type = graphene.String
+    def Mixin():
+        (app_label, model) = snippet_model.lower().split(".")
+        mdl = ContentType.objects.get(app_label=app_label, model=model)
+        if mdl:
+            field_type = registry.snippets[mdl.model_class()]
+        else:
+            field_type = graphene.String
 
-    if field_type and is_list:
-        field_type = graphene.List(field_type)
-    elif field_type:
-        field_type = graphene.Field(field_type)
+        if field_type and is_list:
+            field_type = graphene.List(field_type)
+        elif field_type:
+            field_type = graphene.Field(field_type)
 
-    return GraphQLField(field_name, field_type)
+        return GraphQLField(field_name, field_type)
+
+    return Mixin
 
 
 def GraphQLStreamfield(field_name: str):
@@ -146,4 +149,13 @@ def GraphQLMedia(field_name: str):
 
         return GraphQLField(field_name, MediaObjectType)
 
+    return Mixin
+
+
+def GraphQLPage(field_name: str):
+    def Mixin():
+        from .types.pages import PageInterface
+
+        return GraphQLField(field_name, PageInterface)
+    
     return Mixin
