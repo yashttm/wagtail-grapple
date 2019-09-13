@@ -73,18 +73,20 @@ def GraphQLBoolean(field_name: str):
     return Mixin
 
 
-def GraphQLSnippet(field_name: str, snippet_model: str):
-    class Mixin(GraphQLField):
-        def __init__(self):
-            (app_label, model) = snippet_model.lower().split(".")
-            mdl = ContentType.objects.get(app_label=app_label, model=model)
-            if mdl:
-                self.field_type = registry.snippets[mdl.model_class()]
-            else:
-                self.field_type = graphene.String
-            self.field_name = field_name
+def GraphQLSnippet(field_name: str, snippet_model: str, is_list: bool = False):
+    (app_label, model) = snippet_model.lower().split(".")
+    mdl = ContentType.objects.get(app_label=app_label, model=model)
+    if mdl:
+        field_type = registry.snippets[mdl.model_class()]
+    else:
+        field_type = graphene.String
 
-    return Mixin
+    if field_type and is_list:
+        field_type = graphene.List(field_type)
+    elif field_type:
+        field_type = graphene.Field(field_type)
+
+    return GraphQLField(field_name, field_type)
 
 
 def GraphQLStreamfield(field_name: str):
