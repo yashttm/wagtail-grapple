@@ -157,7 +157,7 @@ def GraphQLPage(field_name: str):
         from .types.pages import PageInterface
 
         class Field(GraphQLField):
-            def __init__(self, field_name: str, field_type: type = None, **kwargs):
+            def __init__(self):
                 self.field_name = field_name
                 self.field_type = PageInterface
         
