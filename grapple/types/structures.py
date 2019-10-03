@@ -73,17 +73,21 @@ class QuerySetList(graphene.List):
 
         # If type is provided as a lazy value (e.g. using lambda), then
         # the search has to be enabled explicitly.
+        model_indexed = False
+        if inspect.isclass(of_type):
+            if hasattr(of_type._meta, 'model'):
+                model_indexed = class_is_indexed(of_type._meta.model)
+
         if (enable_search is True and not inspect.isclass(of_type)) or (
             enable_search is True
             and inspect.isclass(of_type)
-            and class_is_indexed(getattr(of_type._meta, 'model', None))
+            and model_indexed
             and "search_query" not in kwargs
         ):
             kwargs["search_query"] = graphene.Argument(
                 graphene.String,
                 description=_("Filter the results using Wagtail's search."),
             )
-
 
         if "id" not in kwargs:
             kwargs["id"] = graphene.Argument(graphene.ID, description=_("Filter by ID"))
