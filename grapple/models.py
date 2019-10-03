@@ -81,11 +81,11 @@ def GraphQLForeignKey(field_name, content_type, is_list=False, **kwargs):
             app_label, model = content_type.lower().split(".")
             mdl = apps.get_model(app_label, model)
             if mdl:
-                field_type = lambda: registry.models.get(mdl)
+                field_type = lambda: registry.models[mdl]
         else:
-            field_type = lambda: registry.models.get(content_type)
+            field_type = lambda: registry.models[content_type]
 
-        return GraphQLField(field_name, graphene.Field(field_type), **kwargs)
+        return GraphQLField(field_name, field_type, **kwargs)
 
     return Mixin
 
