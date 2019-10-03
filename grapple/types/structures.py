@@ -49,15 +49,6 @@ class QuerySetList(graphene.List):
         enable_search = kwargs.pop("enable_search", True)
         enable_order = kwargs.pop("enable_order", True)
 
-        # Check if the type is a Django model type. Do not perform the
-        # check if value is lazy.
-        if inspect.isclass(of_type) and not issubclass(
-            of_type, graphene_django.DjangoObjectType
-        ):
-            raise TypeError(
-                f"{of_type} is not a subclass of DjangoObjectType and it "
-                "cannot be used with QuerySetList."
-            )
         # Enable limiting on the queryset.
         if enable_limit is True and "limit" not in kwargs:
             kwargs["limit"] = graphene.Argument(
