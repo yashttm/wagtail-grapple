@@ -279,8 +279,9 @@ def convert_to_underscore(name):
 
 def streamfield_resolver(self, instance, info, **kwargs):
     field_name = convert_to_underscore(info.field_name)
-    print(vars(instance.block))
+    print(field_name)
     print(instance.block.child_blocks)
+    print('======================')
     block = instance.block.child_blocks.get(field_name, None)
     value = instance.value.get(field_name, None)
 
