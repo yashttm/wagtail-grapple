@@ -94,13 +94,7 @@ class ImageObjectType(DjangoObjectType, BaseImageObjectType):
         img = self.get_rendition(filters)
         rendition_type = get_rendition_type()
 
-        return rendition_type(
-            id=img.id,
-            width=img.width,
-            height=img.height,
-            file=img.file,
-            image=self,
-        )
+        return img
         
 
     def resolve_src_set(self, info, sizes, **kwargs):
