@@ -90,21 +90,19 @@ class ImageObjectType(DjangoObjectType, BaseImageObjectType):
         """
         Render a custom rendition of the current image.
         """
-        try:
-            filters = "|".join([f"{key}-{val}" for key, val in kwargs.items()])
-            img = self.get_rendition(filters)
-            rendition_type = get_rendition_type()
+        filters = "|".join([f"{key}-{val}" for key, val in kwargs.items()])
+        img = self.get_rendition(filters)
+        rendition_type = get_rendition_type()
 
-            return rendition_type(
-                id=img.id,
-                url=img.url,
-                width=img.width,
-                height=img.height,
-                file=img.file,
-                image=self,
-            )
-        except:
-            return None
+        return rendition_type(
+            id=img.id,
+            url=img.url,
+            width=img.width,
+            height=img.height,
+            file=img.file,
+            image=self,
+        )
+        
 
     def resolve_src_set(self, info, sizes, **kwargs):
         """
