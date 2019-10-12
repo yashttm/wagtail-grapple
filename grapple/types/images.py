@@ -96,7 +96,6 @@ class ImageObjectType(DjangoObjectType, BaseImageObjectType):
 
         return rendition_type(
             id=img.id,
-            url=img.url,
             width=img.width,
             height=img.height,
             file=img.file,
