@@ -281,7 +281,7 @@ def streamfield_resolver(self, instance, info, **kwargs):
     field_name = convert_to_underscore(info.field_name)
     block = instance.block.child_blocks[field_name]
     value = instance.value[field_name]
-    print(instance)
+    print(vars(instance))
 
     if not block or not value:
         return None
