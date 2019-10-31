@@ -82,7 +82,7 @@ def generate_streamfield_union(graphql_types):
                 if mdl in registry.streamfield_blocks:
                     return registry.streamfield_blocks[mdl]
 
-            return registry.streamfield_blocks["generic-block"]
+            return StructBlock
 
     return StreamfieldUnion
 
