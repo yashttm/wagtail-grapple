@@ -279,8 +279,7 @@ def convert_to_underscore(name):
 
 def streamfield_resolver(self, instance, info, **kwargs):
     value = None
-    if hasattr(instance, 'block'):
-
+    if hasattr(instance, "block"):
         field_name = convert_to_underscore(info.field_name)
         block = instance.block.child_blocks[field_name]
         value = instance.value[field_name]
