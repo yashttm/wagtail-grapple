@@ -81,6 +81,8 @@ def generate_streamfield_union(graphql_types):
                 mdl = type(instance.block)
                 if mdl in registry.streamfield_blocks:
                     return registry.streamfield_blocks[mdl]
+            else:
+                print(vars(instance))
 
             return StructBlock
 
