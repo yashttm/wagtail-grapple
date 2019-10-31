@@ -289,9 +289,6 @@ def streamfield_resolver(self, instance, info, **kwargs):
 
         if issubclass(type(block), ImageChooserBlock) and isinstance(value, int):
             return block.to_python(value)
-    else:
-        print("Invalid Streamfield Value: ")
-        print(vars(instance))
 
     return value
 
