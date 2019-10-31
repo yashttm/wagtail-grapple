@@ -47,6 +47,9 @@ class StreamFieldInterface(graphene.Interface):
             for block_class in inspect.getmro(mdl):
                 if block_class in registry.streamfield_blocks:
                     return registry.streamfield_blocks[block_class]
+        else:
+            print("Invalid Streamfield Value: ")
+            print(vars(instance))
 
         return registry.streamfield_blocks["generic-block"]
 
