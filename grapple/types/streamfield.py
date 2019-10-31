@@ -77,14 +77,12 @@ def generate_streamfield_union(graphql_types):
             If block has a custom Graphene Node type in registry then use it,
             otherwise use generic block type.
             """
-            if hasattr(instance, 'stream_block'):
-                mdl = type(instance.stream_block)
-                if mdl in registry.streamfield_blocks:
-                    return registry.streamfield_blocks[mdl]
-            else:
-                print(vars(instance))
+            print(vars(instance))
+            mdl = type(instance.stream_block)
+            if mdl in registry.streamfield_blocks:
+                return registry.streamfield_blocks[mdl]
 
-            return StructBlock
+            return registry.streamfield_blocks["generic-block"]
 
     return StreamfieldUnion
 
