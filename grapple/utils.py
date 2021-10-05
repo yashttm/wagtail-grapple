@@ -8,10 +8,13 @@ from wagtail.search.index import class_is_indexed
 from wagtail.search.models import Query
 from wagtail.search.backends import get_search_backend
 
+from graphql_jwt.decorators import login_required
+
 from .types.structures import BasePaginatedType, PaginationType
 from .settings import grapple_settings
 
 
+@login_required
 def resolve_queryset(
     qs,
     info,
@@ -112,7 +115,7 @@ def get_paginated_result(qs, page, per_page):
         ),
     )
 
-
+@login_required
 def resolve_paginated_queryset(
     qs, info, page=None, per_page=None, search_query=None, id=None, order=None, **kwargs
 ):
