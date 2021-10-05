@@ -84,6 +84,7 @@ Getting Grapple installed is designed to be as simple as possible!
 ```
 Django  >= 2.2, <3.1 (<2.3 if using channels)
 Wagtail >= 2.5, <2.13
+django-graphql-jwt >= 0.3.4
 ```
 
 ### Installation
